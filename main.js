@@ -72,6 +72,7 @@ var update_mesh = { up_mesh:function(){
     }
     terrain.regenerate_mesh(mesh, map);}
 };
+
 // #endregion
 // #region GUI
 const gui = new GUI();
