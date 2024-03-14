@@ -1,0 +1,22 @@
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin: 0px;
+    padding:0px;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    font-size: 300%;
+    background-color: yellow;
+    width: 100%;
+    margin:0px;
+    padding: 10px 5px;
+    margin-top: auto;
+}
