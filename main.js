@@ -32,15 +32,19 @@ light_dir.position.set(-50, 40, 50);
 light_dir.castShadow=true;
 // #endregion
 // #region Build
-var grid = perlin.create_grid();
-var map = perlin.create_layered_map(grid);
-var mesh = terrain.create_mesh(map);
+var grid = perlin.create_grid(options.grid_size.current);
+var map = perlin.create_layered_map(options.resolution.current, grid, options.grid_size.current, options.map_scale.current, 
+    options.octaves.current, options.persistance.current, options.lacunarity.current);
+var mesh = terrain.create_mesh(options.resolution.current, map, options.map_scale.current, options.scale.xz, 
+    options.scale.y, options.offset.x, options.offset.y);
 var remake_map = false;
 var regenerate_grid = { regen_grid:function(){
     options.grid_size.current = options.grid_size.new;
-    grid = perlin.create_grid();
-    regenerate_map.regen_map();
-    terrain.regenerate_mesh(mesh, map);
+    grid = perlin.create_grid(options.grid_size.current);
+    map = perlin.create_layered_map(options.resolution.current, grid, options.grid_size.current, options.map_scale.current, 
+        options.octaves.current, options.persistance.current, options.lacunarity.current);
+    terrain.regenerate_mesh(mesh, options.resolution.current, map, options.map_scale.current, options.scale.xz, 
+        options.scale.y, options.offset.x, options.offset.y);
 }};
 var regenerate_map = { regen_map:function(){
     remake_map = false;
@@ -49,13 +53,15 @@ var regenerate_map = { regen_map:function(){
     options.octaves.current = options.octaves.new;
     options.persistance.current = options.persistance.new;
     options.lacunarity.current = options.lacunarity.new;
-    map = perlin.create_layered_map(grid);
-    terrain.regenerate_mesh(mesh, map);
+    map = perlin.create_layered_map(options.resolution.current, grid, options.grid_size.current, options.map_scale.current, 
+        options.octaves.current, options.persistance.current, options.lacunarity.current);
+    terrain.regenerate_mesh(mesh, options.resolution.current, map, options.map_scale.current, options.scale.xz, 
+        options.scale.y, options.offset.x, options.offset.y);
 }};
 var update_mesh = { up_mesh:function(){
     if(options.grid_size.current != options.grid_size.new) {
         options.grid_size.current = options.grid_size.new;
-        grid = perlin.create_grid();
+        grid = perlin.create_grid(options.grid_size.current);
 
         //Make sure the map also gets remade
         remake_map = true;
@@ -68,9 +74,11 @@ var update_mesh = { up_mesh:function(){
         options.octaves.current = options.octaves.new;
         options.persistance.current = options.persistance.new;
         options.lacunarity.current = options.lacunarity.new;
-        map = perlin.create_layered_map(grid);
+        map = perlin.create_layered_map(options.resolution.current, grid, options.grid_size.current, options.map_scale.current, 
+            options.octaves.current, options.persistance.current, options.lacunarity.current);
     }
-    terrain.regenerate_mesh(mesh, map);}
+    terrain.regenerate_mesh(mesh, options.resolution.current, map, options.map_scale.current, options.scale.xz, 
+        options.scale.y, options.offset.x, options.offset.y);}
 };
 
 // #endregion

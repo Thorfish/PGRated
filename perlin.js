@@ -1,9 +1,7 @@
-import { options } from "./options.js";
-
-export function create_grid() {
+export function create_grid(grid_size) {
     var grid = [[,]];
-    for(var i=0;i<options.grid_size.current+1;i++) {
-        for(var j=0;j<options.grid_size.current+1;j++) {
+    for(var i=0;i<grid_size+1;i++) {
+        for(var j=0;j<grid_size+1;j++) {
             grid[[i, j]] = random_vector();
         }
     }
@@ -45,33 +43,33 @@ function dot_product_grid(grid, x, y, ix, iy) {
     var dy = y-iy;
     return (dx*grid[[ix,iy]].x+dy*grid[[ix,iy]].y);
 }
-export function create_map(grid) {
-    if(options.map_scale.current == 0) return; 
+export function create_map(resolution, grid, grid_size, map_scale) {
+    if(map_scale == 0) return; 
     var map = [[,]];
-    var sample_size = options.grid_size.current/(options.resolution.current+1)*options.map_scale.current;
-    for(var row=0;row<(resolution+1)*(1/options.map_scale.current); row++) {
-        for(var column=0;column<(options.resolution.current+1)*(1/options.map_scale.current);column++) {
+    var sample_size = grid_size/(resolution+1)*map_scale;
+    for(var row=0;row<(resolution+1)*(1/map_scale); row++) {
+        for(var column=0;column<(resolution+1)*(1/map_scale);column++) {
             map[[column, row]] = get_perlin(grid, sample_size*column, sample_size*row);
         }
     }
     return map;
 }
 
-export function create_layered_map(grid) {
-    if(options.map_scale.current == 0) return; 
+export function create_layered_map(resolution, grid, grid_size, map_scale, octaves, persistance, lacunarity) {
+    if(map_scale == 0) return; 
     var map = [[,]];
-    var sample_size = options.grid_size.current/(options.resolution.current+1)*options.map_scale.current;
-    var lacunarity_scale_factor = Math.pow(options.lacunarity.current, options.octaves.current-1);
-    for(var row=0;row<(options.resolution.current+1)*(1/options.map_scale.current); row++) {
-        for(var column=0;column<(options.resolution.current+1)*(1/options.map_scale.current);column++) {
+    var sample_size = grid_size/(resolution+1)*map_scale;
+    var lacunarity_scale_factor = Math.pow(lacunarity, octaves-1);
+    for(var row=0;row<(resolution+1)*(1/map_scale); row++) {
+        for(var column=0;column<(resolution+1)*(1/map_scale);column++) {
             var value = 0;
             var frequency = 1;
             var amplitude = 1;
-            for(var i=0; i<options.octaves.current; i++) {
+            for(var i=0; i<octaves; i++) {
                 value += get_perlin(grid, sample_size*column*frequency/lacunarity_scale_factor, 
                     sample_size*row*frequency/lacunarity_scale_factor) * amplitude;
-                amplitude*=options.persistance.current;
-                frequency*=options.lacunarity.current;
+                amplitude*=persistance;
+                frequency*=lacunarity;
             }
             map[[column, row]] = value;
         }
